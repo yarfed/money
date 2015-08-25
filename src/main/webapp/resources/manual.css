@@ -1,0 +1,36 @@
+body {
+    padding: 0 5px;
+
+}
+.container {
+    padding:0 1%;
+    margin:0 0;
+    width:100%;
+    background-color: beige;
+}
+.accounts {
+    margin-top: 40px;
+}
+.opCol{
+    padding-right: 0;
+
+}
+
+
+.selected{
+    background-color: gray;
+}
+.accountName {
+
+}
+
+.accountValue {
+
+    text-align: right;
+
+}
+.accountCurrency {
+
+
+    text-align: right;
+}

@@ -1,0 +1,55 @@
+<div class="col-xs-8 col-md-6" >
+<table class="table  table-hover">
+
+    <tbody ng-repeat='(id,account) in service.accountsIndex'>
+    <tr ng-if='account != service.activeAccount'>
+        <td class="accountName">
+            <span class="glyphicon glyphicon-star-empty"> </span>
+            {{account.name}}
+        </td>
+        <td class="accountValue">
+            {{account.value}} {{account.currency}}
+        </td>
+        <td>
+            <a   href='' ng-click='service.edit(account)'>
+                <span class="glyphicon glyphicon-edit btn-default"></span>
+            </a>
+            <a   href='' ng-click='service.del(account.id)'>
+                <span class="glyphicon glyphicon-remove-circle btn-danger"></span>
+            </a>
+        </td>
+    </tr>
+    <tr ng-if='account == service.activeAccount'  >
+
+        <td><input class='form-control' ng-model='account.name' type='text'></td>
+        <td><input class='form-control' ng-model='account.value' type='text'></td>
+        <td>{{account.currency}}</td>
+        <td>
+            <a  href='' ng-click='service.add(account)'>
+                <span class="glyphicon glyphicon-ok btn-success"></span>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+    <tbody>
+
+    <tr>
+        <td> <input class="form-control" ng-model='service.newAccount.name' type='text'></td>
+        <td> <input class="form-control" ng-model='service.newAccount.value'  type='number'></td>
+        <td>
+            <select ng-model="service.newAccount.currency" >
+                <option value="eur">eur</option>
+                <option value="usd">usd</option>
+                <option value="rub">rub</option>
+                <option value="nis">nis</option>
+            </select>
+        </td>
+        <td>
+            <a href="" ng-click='service.add(service.newAccount)'>
+                <span class="glyphicon glyphicon-plus btn-success"></span>
+            </a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</div>

@@ -1,0 +1,63 @@
+<form name="operationsForm" role='form' class="form-horizontal">
+
+    <div class="form-control">
+                             <span class="glyphicon glyphicon-circle-arrow-left"
+                                   ng-click="changeDate(-1);"></span>
+        {{operation.date|date}}
+                             <span class="glyphicon glyphicon-circle-arrow-right"
+                                   ng-click="changeDate(1);"></span>
+    </div>
+    <div class="form-group">
+        <label ng-show="operation.id"
+               class=" col-xs-offset-1 control-label">Edit {{operation.type}}</label>
+        <label ng-hide="operation.id"
+               class=" col-xs-offset-1 control-label">Create new {{operation.type}}</label>
+
+
+    </div>
+    <div  class="form-group">
+        <label class="col-xs-2 control-label">value:</label>
+
+        <div class="col-xs-3">
+            <input class="form-control" type="number" placeholder="kama"
+                   ng-model="operation.inValue">
+        </div>
+
+        <label class="col-xs-2  control-label">account:</label>
+
+        <div class="col-xs-5">
+
+            <select class="form-control" ng-model="operation.inAccountId"
+                    ng-options="account.id as account.name for (id, account) in accountsIndex">
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-2 control-label">category:</label>
+
+        <div class="col-xs-6" ordered-list="incomeCategories" index="incomeCategoriesIndex"
+             id="operation.inCategoryId" editable="false" open="$parent.isCategoriesOpen">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-xs-2 control-label">comment:</label>
+        <div class="col-xs-8">
+            <textarea class="form-control" rows="2" ng-model="operation.comment"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-xs-1 col-xs-offset-1">
+            <button class='btn btn-primary' ng-click='addOperation()'
+                    ng-disabled="(!operation.inValue||!operation.inAccountId||operation.inCategoryId===undefined)"> Save </button>
+        </div>
+        <div class="col-xs-1 col-xs-offset-1">
+            <button ng-show="operation.id"
+                    class='btn btn-danger' ng-click='deleteOperation(operation.id)'>Delete</button>
+        </div>
+        <div class="col-xs-1 col-xs-offset-5">
+            <button class='btn btn-default' ng-click='eraseForm()'>Cancel</button>
+        </div>
+    </div>
+
+</form>

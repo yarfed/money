@@ -1,0 +1,71 @@
+<style>
+    li {
+        list-style-type: none; /* Убираем маркеры */
+    }
+    ul {
+        margin-left: 5px; /* Отступ слева в браузере IE и Opera */
+        padding-left: 5px; /* Отступ слева в браузере Firefox, Safari, Chrome */
+
+    }
+    .category:hover{
+        background-color: lightgoldenrodyellow;
+    }
+.selectContainer{
+
+    position:absolute;
+
+    width: 100%;
+    z-index: 5;
+}
+    .categoryContainer {
+        max-height: 500px;
+        padding-top: 0;
+        padding-left: 0;
+        overflow-y: auto;
+    }
+    .selectTitle{
+        padding: 2px 2px 2px 2px;
+    }
+
+</style>
+<script type="text/ng-template" id="category-tree">
+    <div class="category"
+         ng-show="category.name.indexOf(pattern)>-1||!pattern"
+         ng-click="chooseCategory(category)"
+         ng-style="id==category.id ? { 'background-color' :   'lightsteelblue' }: {}">
+      {{ category.name }} - {{category.order}}
+    </div>
+    <ul>
+        <li  ng-repeat="category in categories|filter:matchId(category.id)|orderBy:'order'"
+            ng-include="'category-tree'">
+        </li>
+    </ul>
+</script>
+
+<div class="panel panel-default selectContainer">
+
+    <div class="panel-heading selectTitle"  ng-hide="editable">
+        <div ng-click="openCategories();$event.stopPropagation();" style="text-align: left">
+          <span>{{index[id].name}}</span>
+
+            <div ng-show="(!id)">
+            <span >choose category</span>
+                <span  style="float:right" class="glyphicon glyphicon-chevron-down"></span>
+            </div>
+
+        </div>
+
+    </div>
+    <input ng-model="pattern" ng-hide="editable||!isOpen">
+    <div class="panel-body categoryContainer" ng-show="isOpen||editable" >
+
+        <ul >
+
+            <li  ng-repeat="category in categories| filter:matchId(0)|orderBy:'order'"
+                ng-include="'category-tree'" ></li>
+        </ul>
+    </div>
+</div>
+
+
+

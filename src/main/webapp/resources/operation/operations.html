@@ -1,0 +1,90 @@
+<div ng-click="isCategoriesOpen=false">
+<div class="row">
+    <div class="col-xs-7 col-md-7" style="text-align: left">
+        <ul class="nav nav-pills">
+            <li ng-class="operation.type=='expense' ? 'active':''">
+                <a data-toggle="tab" href="" ng-click="setMode('expense')">Expense</a>
+            </li>
+            <li ng-class="operation.type=='income' ? 'active':''">
+                <a data-toggle="tab" href="" ng-click="setMode('income')">Income</a>
+            </li>
+            <li ng-class="operation.type=='transfer' ? 'active':''">
+                <a data-toggle="tab" href="" ng-click="setMode('transfer')">Transfer</a>
+            </li>
+            <li ng-class="operation.type=='exchange' ? 'active':''">
+                <a data-toggle="tab" href="" ng-click="setMode('exchange')">Exchange</a>
+            </li>
+        </ul>
+        <div class="panel panel-default">
+
+            <div ng-include="setFile()"></div>
+
+        </div>
+
+    </div>
+    <div class="col-xs-5 col-md-5">
+        <div class="panel panel-default accounts">
+            <div class="panel-heading">
+                Accounts
+            </div>
+            <table class="table  table-hover">
+                <tr ng-repeat="(id,account) in accountsIndex">
+                    <td class="accountName">
+                        <span class="glyphicon glyphicon-star-empty"> </span>
+                        {{account.name}}
+                    </td>
+                    <td class="accountValue">
+                        {{account.value}} {{account.currency}}
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="col-xs-7 col-md-7">
+
+        <div class="panel panel-default accounts">
+            <div class="panel-heading">
+                Operations
+            </div>
+            <table class="table  table-hover">
+                <tbody ng-repeat="operation in operations | orderBy:'-date'">
+                <tr ng-show="operation.type=='expense'" ng-click="setOperation(operation)">
+                    <td>
+                        <span class="glyphicon glyphicon-export"></span>
+                    </td>
+
+                    <td class="accountValue"> {{operation.outValue}}
+                        {{accountsIndex[operation.outAccountId].currency}}
+                    </td>
+                    <td> from {{accountsIndex[operation.outAccountId].name}}
+                        on {{expenseCategoriesIndex[operation.outCategoryId].name}}
+                    </td>
+                    <td>
+                        {{operation.date|date:"dd.MM.yy &nbsp; HH:mm"}}
+                    </td>
+                </tr>
+                <tr ng-show="operation.type=='income'" ng-click="setOperation(operation)">
+                    <td>
+                        <span class="glyphicon glyphicon-import"></span>
+                    </td>
+
+                    <td class="accountValue"> {{operation.inValue}}
+                        {{accountsIndex[operation.inAccountId].currency}}
+                    </td>
+                    <td> to {{accountsIndex[operation.inAccountId].name}}
+                        from {{incomeCategoriesIndex[operation.inCategoryId].name}}
+                    </td>
+                    <td>
+                        {{operation.date|date:"dd.MM.yy &nbsp; HH:mm"}}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</div>
+</div>

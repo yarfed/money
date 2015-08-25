@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+          http://www.springframework.org/schema/tx
+          http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+ <context:component-scan base-package="ru.jarda.model"/>
+
+    <bean id="inCategoryService" class="ru.jarda.model.services.CategoryService">
+        <property name="categories" ref="inCategoriesDao"/>
+
+    </bean>
+    <bean id="outCategoryService" class="ru.jarda.model.services.CategoryService">
+        <property name="categories" ref="outCategoriesDao"/>
+
+    </bean>
+
+    <bean id="inCategoriesDao" class="ru.jarda.model.dao.DaoHibernateImpl">
+        <constructor-arg>
+            <value>ru.jarda.model.entities.InCategory</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="outCategoriesDao" class="ru.jarda.model.dao.DaoHibernateImpl">
+        <constructor-arg>
+            <value>ru.jarda.model.entities.OutCategory</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="accountsDao" class="ru.jarda.model.dao.DaoHibernateImpl">
+        <constructor-arg>
+            <value>ru.jarda.model.entities.Account</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="operationDao" class="ru.jarda.model.dao.DaoHibernateImpl">
+        <constructor-arg>
+            <value>ru.jarda.model.entities.Operation</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="userDaoJdbcImpl" class="ru.jarda.model.dao.UserDaoJdbcImpl">
+        <property name="dataSource"  ref="dataSource" />
+    </bean>
+
+    <bean id="dataSource"
+          class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql://62.109.11.169:3306/money"/>
+        <property name="user" value="root"/>
+        <property name="password" value="iddqd348"/>
+        <property name="acquireIncrement" value="1"/>
+        <property name="minPoolSize" value="3"/>
+        <property name="maxPoolSize" value="10"/>
+        <property name="idleConnectionTestPeriod" value="100"/>
+        <property name="unreturnedConnectionTimeout" value="100"/>
+        <property name="preferredTestQuery" value="select 1;"/>
+    </bean>
+
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource">
+            <ref local="dataSource" />
+        </property>
+
+        <property name="packagesToScan">
+        		<list>
+        			<value>ru.jarda.model.entities</value>
+        		</list>
+</property>
+
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+            </props>
+        </property>
+    </bean>
+        <tx:annotation-driven transaction-manager="transactionManager"/>
+        <bean id="transactionManager"
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+            <property name="sessionFactory" ref="sessionFactory" />
+        </bean>
+
+</beans>
