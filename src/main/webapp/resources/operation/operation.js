@@ -121,7 +121,6 @@ app.factory('OperationService',['$http' , 'AccountService',function($http, Accou
         });
     };
 
-
     return o;
 }]);
 

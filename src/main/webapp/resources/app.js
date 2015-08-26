@@ -18,6 +18,11 @@ app.config(function($routeProvider) {
             templateUrl: 'resources/category/changeCategory.html',
             controller: 'ChangeCategoryCtrl'
         });
+    $routeProvider.when('/changeCurrency',
+        {
+            templateUrl: 'resources/currency/changeCurrency.html',
+            controller: 'ChangeCurrencyCtrl'
+        });
 
     });
 function createIndexObj(obj,data){

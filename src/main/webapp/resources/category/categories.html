@@ -33,7 +33,7 @@
          ng-show="category.name.indexOf(pattern)>-1||!pattern"
          ng-click="chooseCategory(category)"
          ng-style="id==category.id ? { 'background-color' :   'lightsteelblue' }: {}">
-      {{ category.name }} - {{category.order}}
+      {{ category.name }}
     </div>
     <ul>
         <li  ng-repeat="category in categories|filter:matchId(category.id)|orderBy:'order'"
@@ -43,7 +43,6 @@
 </script>
 
 <div class="panel panel-default selectContainer">
-
     <div class="panel-heading selectTitle"  ng-hide="editable">
         <div ng-click="openCategories();$event.stopPropagation();" style="text-align: left">
           <span>{{index[id].name}}</span>
@@ -52,15 +51,11 @@
             <span >choose category</span>
                 <span  style="float:right" class="glyphicon glyphicon-chevron-down"></span>
             </div>
-
         </div>
-
     </div>
     <input ng-model="pattern" ng-hide="editable||!isOpen">
     <div class="panel-body categoryContainer" ng-show="isOpen||editable" >
-
         <ul >
-
             <li  ng-repeat="category in categories| filter:matchId(0)|orderBy:'order'"
                 ng-include="'category-tree'" ></li>
         </ul>

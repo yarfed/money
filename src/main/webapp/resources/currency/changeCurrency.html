@@ -1,0 +1,119 @@
+<div class="col-xs-5 " >
+    <table class="table  table-hover">
+
+        <tbody ng-repeat='(id,currency) in service.myCurrencies'>
+        <tr >
+            <td >
+                {{currency.code}} {{currency.name}}
+            </td>
+            <td >
+                {{currency.value}} <input type="checkbox" ng-model="currency.update" >
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div class="col-xs-5 ">
+    <ul class="nav nav-pills">
+        <li >
+            <a data-toggle="tab" href="" ng-click="mode='new'">add</a>
+        </li>
+        <li >
+            <a data-toggle="tab" href="" ng-click="mode='edit'">edit</a>
+        </li>
+    </ul>
+    <div class="panel panel-default">
+        <form ng-show="mode=='new'" name="currencyForm" role='form' class="form-horizontal">
+            <div class="form-group">
+                <label class=" col-xs-offset-1 control-label">Create new Currency</label>
+            </div>
+            <div  class="form-group">
+                <div class="col-xs-3 ">
+                    <input class="form-control" type="text" disabled="true"
+                           ng-model="newCurrency.code">
+                </div>
+                <div class="col-xs-6 ">
+                           <input class="form-control" type="text" placeholder=" name"
+                           ng-model="newCurrency.name">
+                </div>
+                <div class="col-xs-3 ">
+                    <input class="form-control" type="text"
+                           ng-model="newCurrency.symbol">
+                </div>
+            </div>
+            <div  class="form-group">
+                <label class="col-xs-2  control-label">course</label>
+                <div class="col-xs-2 ">
+
+                    <input class="form-control" type="text" ng-disabled="newCurrency.update"
+                           ng-model="newCurrency.value">
+                </div>
+                <label class="col-xs-2  control-label">updated</label>
+                <div class="col-xs-2">
+
+                    <input  type="checkbox"
+                           ng-model="newCurrency.update">
+                    </div>
+
+            </div>
+            <div  class="form-group">
+
+                <div class="col-xs-10 col-xs-offset-1">
+
+                   <select  ng-model="addedCurrency" class="form-control"
+                         ng-options="currency as id + ' - ' + currency.name  for (id, currency) in service.allCurrency">
+                   </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-1 col-xs-offset-1">
+                    <button class='btn btn-primary' ng-click='addNewCategory()'
+                            ng-disabled="">Add new </button>
+                </div>
+
+                <div class="col-xs-1 col-xs-offset-4">
+                    <button class='btn btn-default' ng-click='newCategory.parentId=0'>Set Root</button>
+                </div>
+            </div>
+            {{service.myCurrencies}}
+        </form>
+
+        <form ng-show="mode=='edit'" name="editCategoriesForm" role='form' class="form-horizontal">
+            <div class="form-group">
+                <label  class=" col-xs-offset-1 control-label">Edit Category</label>
+            </div>
+            <div  class="form-group">
+                <div class="col-xs-8 col-xs-offset-1">
+                    <input class="form-control" type="text"
+                           ng-model="activeCategory.name">
+                </div>
+            </div>
+            <div  class="form-group">
+                <label class="col-xs-5  control-label">parentCategory:</label>
+
+
+                <div class="col-xs-5" ordered-list="categories" index="categoriesIndex"
+                     id="activeCategory.parentId"  editable="false" open="isCategoriesOpen">
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <div class="col-xs-2 col-xs-offset-1">
+                    <button class='btn btn-primary' ng-click='addCategory()'
+                            ng-disabled="!activeCategory.id">Edit</button>
+                </div>
+                <div class="col-xs-1 col-xs-offset-2">
+                    <button ng-show="activeCategory.id"
+                            class='btn btn-danger' ng-click='deleteCategory()'>Del</button>
+                </div>
+                <div class="col-xs-1 col-xs-offset-1">
+                    <button class='btn btn-default' ng-click='eraseForm()'>Cancel</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+

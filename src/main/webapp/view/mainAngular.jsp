@@ -28,13 +28,14 @@
     <script src="resources/account/account.js"></script>
     <script src="resources/category/category.js"></script>
     <script src="resources/operation/operation.js"></script>
+    <script src="resources/currency/currency.js"></script>
 
 </head>
 <body ng-app="moneyApp">
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <span id="message">message</span>
+            <span id="message">login:user pass:user</span>
 
             <div id="nav-account">
                 Welcome:&nbsp;
@@ -59,7 +60,7 @@
                             </li>
                             <li><a href="#/changeCategory/expense"><span class="glyphicon glyphicon-export"></span> expense categories</a></li>
                             <li><a href="#/changeAccounts"><span class="glyphicon glyphicon-briefcase"></span> accounts</a></li>
-                            <li><a href="#"><span class="glyphicon glyphicon-usd"></span> currency</a></li>
+                            <li><a href="#/changeCurrency"><span class="glyphicon glyphicon-usd"></span> currency</a></li>
                         </ul>
                     </li>
                     <li><a href="#"><span class="glyphicon glyphicon-list-alt"></span> Reports</a></li>
