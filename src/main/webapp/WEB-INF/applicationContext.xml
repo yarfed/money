@@ -46,6 +46,18 @@
         </constructor-arg>
     </bean>
 
+    <bean id="propertyDao" class="ru.jarda.model.dao.DaoHibernateImpl">
+        <constructor-arg>
+            <value>ru.jarda.model.entities.Property</value>
+        </constructor-arg>
+    </bean>
+
+    <bean id="currencyDao" class="ru.jarda.model.dao.DaoHibernateImpl">
+        <constructor-arg>
+            <value>ru.jarda.model.entities.Currency</value>
+        </constructor-arg>
+    </bean>
+
     <bean id="userDaoJdbcImpl" class="ru.jarda.model.dao.UserDaoJdbcImpl">
         <property name="dataSource"  ref="dataSource" />
     </bean>

@@ -6,13 +6,8 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.jarda.model.entities.Account;
-import ru.jarda.model.entities.InCategory;
-import ru.jarda.model.entities.Operation;
-import ru.jarda.model.entities.OutCategory;
-import ru.jarda.model.services.AccountService;
-import ru.jarda.model.services.CategoryService;
-import ru.jarda.model.services.OperationService;
+import ru.jarda.model.entities.*;
+import ru.jarda.model.services.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,6 +23,10 @@ public class MainController  {
     CategoryService outCategoryService;
     @Autowired
     OperationService operationService;
+    @Autowired
+    PropertyService propertyService;
+    @Autowired
+    CurrencyService currencyService;
 
     @RequestMapping( method = RequestMethod.GET)
     public String home() {
@@ -42,7 +41,7 @@ public class MainController  {
 
     @RequestMapping(params = "getAccounts", method = RequestMethod.GET)
     @ResponseBody
-    public List getAccountService(){
+    public List getAccount(){
         return accountService.getAll();
     }
 
@@ -99,8 +98,6 @@ public class MainController  {
         return  outCategoryService.getAll();
     }
 
-
-
     @RequestMapping(params = "getOperations", method = RequestMethod.GET)
     @ResponseBody
     public List getOperations(){
@@ -114,12 +111,42 @@ public class MainController  {
     }
 
 
-
     @RequestMapping(params = "deleteOperation", method = RequestMethod.GET)
     @ResponseBody
     public List deleteOperation (long id){
         operationService.delete(id);
         return  operationService.getAll();
+    }
+
+    @RequestMapping(params = "getProperty", method = RequestMethod.GET)
+     @ResponseBody
+     public Property getProperty (String name){
+        return   propertyService.getByName(name);
+    }
+
+    @RequestMapping(params = "setProperty", method = RequestMethod.GET)
+    @ResponseStatus(HttpStatus.OK)
+    public void setProperty (String name, String value){
+        propertyService.setProperty(name,value);
+    }
+
+    @RequestMapping(value = "addCurrency", method = RequestMethod.POST)
+    public  @ResponseBody List addCurrency(@RequestBody Currency currency) {
+      currencyService.add(currency);
+        return currencyService.getAll();
+    }
+
+    @RequestMapping(params = "getCurrencies", method = RequestMethod.GET)
+    @ResponseBody
+    public List getCurrencies(){
+        return currencyService.getAll();
+    }
+
+    @RequestMapping(params = "deleteCurrency", method = RequestMethod.GET)
+    @ResponseBody
+    public List deleteCurrency (long id){
+        currencyService.delete(id);
+        return currencyService.getAll();
     }
 
     @ExceptionHandler({ConstraintViolationException.class,DataIntegrityViolationException.class})

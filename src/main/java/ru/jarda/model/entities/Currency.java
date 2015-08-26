@@ -2,11 +2,13 @@ package ru.jarda.model.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * Created by User on 25.08.2015.
  */
 @Entity
+@Table(name = "currency" )
 public class Currency extends CommonEntity {
     @Column
     private String code;
@@ -16,7 +18,7 @@ public class Currency extends CommonEntity {
     private String symbol;
     @Column
     private int course;
-    @Column
+    @Column(name="upd")
     private boolean update;
 
     public String getCode() {

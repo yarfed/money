@@ -1,7 +1,7 @@
 <div class="col-xs-5 " >
     <table class="table  table-hover">
 
-        <tbody ng-repeat='(id,currency) in service.myCurrencies'>
+        <tbody ng-repeat='currency in service.myCurrencies'>
         <tr >
             <td >
                 {{currency.code}} {{currency.name}}
@@ -30,31 +30,31 @@
             <div  class="form-group">
                 <div class="col-xs-3 ">
                     <input class="form-control" type="text" disabled="true"
-                           ng-model="newCurrency.code">
+                           ng-model="service.newCurrency.code">
                 </div>
                 <div class="col-xs-6 ">
                            <input class="form-control" type="text" placeholder=" name"
-                           ng-model="newCurrency.name">
+                           ng-model="service.newCurrency.name">
                 </div>
                 <div class="col-xs-3 ">
                     <input class="form-control" type="text"
-                           ng-model="newCurrency.symbol">
+                           ng-model="service.newCurrency.symbol">
                 </div>
             </div>
-            <div  class="form-group">
+            <div ng-hide="!service.basicCurrency||service.basicCurrency==service.newCurrency.code" class="form-group">
                 <label class="col-xs-2  control-label">course</label>
-                <div class="col-xs-2 ">
+                <div class="col-xs-3 ">
 
-                    <input class="form-control" type="text" ng-disabled="newCurrency.update"
-                           ng-model="newCurrency.value">
+                    <input class="form-control" type="text" ng-disabled="service.newCurrency.update"
+                           ng-model="service.newCurrency.value">
                 </div>
                 <label class="col-xs-2  control-label">updated</label>
                 <div class="col-xs-2">
 
                     <input  type="checkbox"
-                           ng-model="newCurrency.update">
+                           ng-model="service.newCurrency.update">
                     </div>
-
+                <button name="get" ng-click="service.getCourse()">get</button>
             </div>
             <div  class="form-group">
 
@@ -66,17 +66,19 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div ng-show="addedCurrency" class="form-group">
                 <div class="col-xs-1 col-xs-offset-1">
-                    <button class='btn btn-primary' ng-click='addNewCategory()'
+                    <button class='btn btn-primary' ng-click='service.addCurrency()'
                             ng-disabled="">Add new </button>
-                </div>
+                     </div>
 
-                <div class="col-xs-1 col-xs-offset-4">
-                    <button class='btn btn-default' ng-click='newCategory.parentId=0'>Set Root</button>
+                <div ng-hide="service.basicCurrency" class="col-xs-1 col-xs-offset-4">
+                    <span style="color: red"> NO Basic!!!</span>
+                    <button class='btn btn-default'
+                            ng-click='service.setBasic(newCurrency.code)'>Set Basic</button>
                 </div>
             </div>
-            {{service.myCurrencies}}
+            {{service.basicCurrency}}{{service.newCurrency.value}}
         </form>
 
         <form ng-show="mode=='edit'" name="editCategoriesForm" role='form' class="form-horizontal">
