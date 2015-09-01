@@ -1,37 +1,94 @@
-<div class="col-xs-5 " >
+
+<div class="col-xs-6 " >
+{{service.newRates}}
     <table class="table  table-hover">
 
         <tbody ng-repeat='currency in service.myCurrencies'>
-        <tr >
+        <tr ng-if="currency!=service.activeCurrency">
             <td >
-                {{currency.code}} {{currency.name}}
+                <input  type="radio"
+                        ng-model="service.basicCurrency" ng-value=currency.code >
             </td>
             <td >
-                {{currency.value}} <input type="checkbox" ng-model="currency.update" >
+                {{currency.code}}
+            </td>
+            <td>
+                {{currency.name}}
+            </td>
+            <td >
+                {{currency.symbol}}
+            </td>
+            <td ng-hide="currency.code==service.basicCurrency">
+                {{currency.course|number:4}}
+            </td>
+            <td ng-hide="currency.code==service.basicCurrency" >
+                <input type="checkbox" disabled ng-model="currency.update" >
+            </td>
+            <td ng-show="currency.code==service.basicCurrency" colspan="2">
+                <span>Basic</span>
+            </td>
+            <td>
+                <a   href='' ng-click='service.edit(currency)'>
+                    <span class="glyphicon glyphicon-edit btn-default"></span>
+                </a>
+            </td>
+            <td>
+                <a  ng-hide="currency.code==service.basicCurrency" href='' ng-click='service.del(currency.id)'>
+                    <span class="glyphicon glyphicon-remove-sign btn-danger"></span>
+                </a>
+            </td>
+        </tr>
+        <tr ng-if="currency==service.activeCurrency">
+            <td>
+                <input  type="radio" ng-model="service.basicCurrency" ng-value="currency.code">
+            </td>
+             <td>
+                {{currency.code}}
+            </td>
+            <td>
+
+            <input class='form-control' ng-model='currency.name' type='text'>
+           </td>
+            <td>
+                <input class='form-control' ng-model='currency.symbol' type='text'>
+            </td>
+            <td ng-hide="currency.code==service.basicCurrency">
+
+                <span ng-show="currency.update" >{{currency.course|number:4}}</span>
+                <input ng-hide="currency.update" class='form-control' ng-model='currency.course' type='number'>
+           </td>
+            <td ng-hide="currency.code==service.basicCurrency">
+                <input type="checkbox" ng-model="currency.update" >
+            </td>
+            <td ng-show="currency.code==service.basicCurrency" colspan="2">
+                <span>Basic Currency</span>
+            </td>
+            <td>
+                <a  href='' ng-click='service.addCurrency(currency)'>
+                    <span class="glyphicon glyphicon-ok btn-success"></span>
+                </a>
+                <a  href='' ng-click='service.activeCurrency=null'>
+                    <span class="glyphicon glyphicon-remove"></span>
+                </a>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
-<div class="col-xs-5 ">
-    <ul class="nav nav-pills">
-        <li >
-            <a data-toggle="tab" href="" ng-click="mode='new'">add</a>
-        </li>
-        <li >
-            <a data-toggle="tab" href="" ng-click="mode='edit'">edit</a>
-        </li>
-    </ul>
+<div class="col-xs-6 col-lg-5">
+
     <div class="panel panel-default">
-        <form ng-show="mode=='new'" name="currencyForm" role='form' class="form-horizontal">
+        <form  name="currencyForm" role='form' class="form-horizontal">
             <div class="form-group">
-                <label class=" col-xs-offset-1 control-label">Create new Currency</label>
-            </div>
-            <div  class="form-group">
-                <div class="col-xs-3 ">
+                <div class="col-xs-4 ">
                     <input class="form-control" type="text" disabled="true"
                            ng-model="service.newCurrency.code">
                 </div>
+                <label class="col-xs-6  control-label">New Currency</label>
+
+            </div>
+            <div  class="form-group">
+
                 <div class="col-xs-6 ">
                            <input class="form-control" type="text" placeholder=" name"
                            ng-model="service.newCurrency.name">
@@ -42,19 +99,19 @@
                 </div>
             </div>
             <div ng-hide="!service.basicCurrency||service.basicCurrency==service.newCurrency.code" class="form-group">
-                <label class="col-xs-2  control-label">course</label>
-                <div class="col-xs-3 ">
+                <label class="col-xs-2  control-label">Rate </label>
+                <div class="col-xs-4">
 
                     <input class="form-control" type="text" ng-disabled="service.newCurrency.update"
-                           ng-model="service.newCurrency.value">
+                           ng-model="service.newCurrency.course">
                 </div>
-                <label class="col-xs-2  control-label">updated</label>
-                <div class="col-xs-2">
 
+                <label class="col-xs-3  control-label">updated</label>
+                <div class="col-xs-2">
                     <input  type="checkbox"
                            ng-model="service.newCurrency.update">
-                    </div>
-                <button name="get" ng-click="service.getCourse()">get</button>
+                </div>
+
             </div>
             <div  class="form-group">
 
@@ -68,54 +125,20 @@
 
             <div ng-show="addedCurrency" class="form-group">
                 <div class="col-xs-1 col-xs-offset-1">
-                    <button class='btn btn-primary' ng-click='service.addCurrency()'
-                            ng-disabled="">Add new </button>
+                    <button class='btn btn-primary' ng-click='service.addCurrency(service.newCurrency)'
+                           ng-show="service.basicCurrency" ng-disabled="!service.newCurrency.course">Add new </button>
                      </div>
 
                 <div ng-hide="service.basicCurrency" class="col-xs-1 col-xs-offset-4">
                     <span style="color: red"> NO Basic!!!</span>
                     <button class='btn btn-default'
-                            ng-click='service.setBasic(newCurrency.code)'>Set Basic</button>
-                </div>
+                        ng-click='service.setBasic(service.newCurrency.code,"true")'>Set Basic</button>
+                    </div>
             </div>
-            {{service.basicCurrency}}{{service.newCurrency.value}}
+            {{service.basicCurrency}}{{service.newCurrency.course}}
         </form>
 
-        <form ng-show="mode=='edit'" name="editCategoriesForm" role='form' class="form-horizontal">
-            <div class="form-group">
-                <label  class=" col-xs-offset-1 control-label">Edit Category</label>
-            </div>
-            <div  class="form-group">
-                <div class="col-xs-8 col-xs-offset-1">
-                    <input class="form-control" type="text"
-                           ng-model="activeCategory.name">
-                </div>
-            </div>
-            <div  class="form-group">
-                <label class="col-xs-5  control-label">parentCategory:</label>
 
-
-                <div class="col-xs-5" ordered-list="categories" index="categoriesIndex"
-                     id="activeCategory.parentId"  editable="false" open="isCategoriesOpen">
-                </div>
-
-            </div>
-
-            <div class="form-group">
-                <div class="col-xs-2 col-xs-offset-1">
-                    <button class='btn btn-primary' ng-click='addCategory()'
-                            ng-disabled="!activeCategory.id">Edit</button>
-                </div>
-                <div class="col-xs-1 col-xs-offset-2">
-                    <button ng-show="activeCategory.id"
-                            class='btn btn-danger' ng-click='deleteCategory()'>Del</button>
-                </div>
-                <div class="col-xs-1 col-xs-offset-1">
-                    <button class='btn btn-default' ng-click='eraseForm()'>Cancel</button>
-                </div>
-            </div>
-
-        </form>
     </div>
 </div>
 

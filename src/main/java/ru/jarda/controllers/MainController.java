@@ -125,14 +125,16 @@ public class MainController  {
     }
 
     @RequestMapping(params = "setProperty", method = RequestMethod.GET)
-    @ResponseStatus(HttpStatus.OK)
-    public void setProperty (String name, String value){
+    @ResponseBody
+    public Property setProperty (String name, String value){
         propertyService.setProperty(name,value);
+        return propertyService.getByName(name);
     }
 
     @RequestMapping(value = "addCurrency", method = RequestMethod.POST)
     public  @ResponseBody List addCurrency(@RequestBody Currency currency) {
-      currencyService.add(currency);
+
+        currencyService.add(currency);
         return currencyService.getAll();
     }
 

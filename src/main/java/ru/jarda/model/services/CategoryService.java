@@ -48,7 +48,7 @@ public class CategoryService {
         List<Category> childrenList = getChildren(id);
         Collections.sort(brothersList);
         Collections.sort(childrenList);
-        brothersList.addAll(childrenList);
+        brothersList.addAll(category.getOrder(),childrenList);
         for (Category c:childrenList){
             c.setParentId(parentId);
         }
@@ -70,17 +70,25 @@ public class CategoryService {
         Category oldCategory=categories.getObject(category.getId());
         long oldParentId=oldCategory.getParentId();
         long parentId=category.getParentId();
+
         if (oldParentId!=parentId){
             isHeir(category.getId(), parentId);
             category.setOrder(getNextOrderInCategory(parentId));
+            System.out.println(category.getOrder()+" - "+category.getParentId());
+
             categories.saveObject(category);
             List<Category> brothersList = getChildren(oldParentId);
+            Collections.sort(brothersList);
             int i=0;
             for (Category c:brothersList){
+
                 c.setOrder(i++);
                 categories.saveObject(c);
             }
-        } else categories.saveObject(category);
+        } else {
+
+            categories.saveObject(category);
+        }
 
     }
 

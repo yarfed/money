@@ -1,5 +1,4 @@
 package ru.jarda.model.entities;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -7,8 +6,9 @@ import javax.persistence.Table;
 /**
  * Created by User on 25.08.2015.
  */
+
 @Entity
-@Table(name = "currency" )
+@Table(name = "currency")
 public class Currency extends CommonEntity {
     @Column
     private String code;
@@ -17,7 +17,7 @@ public class Currency extends CommonEntity {
     @Column
     private String symbol;
     @Column
-    private int course;
+    private float course;
     @Column(name="upd")
     private boolean update;
 
@@ -45,11 +45,11 @@ public class Currency extends CommonEntity {
         this.symbol = symbol;
     }
 
-    public int getCourse() {
+    public float getCourse() {
         return course;
     }
 
-    public void setCourse(int course) {
+    public void setCourse(float course) {
         this.course = course;
     }
 

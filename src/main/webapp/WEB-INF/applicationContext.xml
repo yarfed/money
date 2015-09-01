@@ -69,7 +69,7 @@
         <property name="user" value="root"/>
         <property name="password" value="iddqd348"/>
         <property name="acquireIncrement" value="1"/>
-        <property name="minPoolSize" value="3"/>
+        <property name="minPoolSize" value="4"/>
         <property name="maxPoolSize" value="10"/>
         <property name="idleConnectionTestPeriod" value="100"/>
         <property name="unreturnedConnectionTimeout" value="100"/>
