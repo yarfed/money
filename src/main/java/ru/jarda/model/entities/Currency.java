@@ -20,6 +20,8 @@ public class Currency extends CommonEntity {
     private float course;
     @Column(name="upd")
     private boolean update;
+    @Column
+    private Boolean basic;
 
     public String getCode() {
         return code;
@@ -59,5 +61,13 @@ public class Currency extends CommonEntity {
 
     public void setUpdate(boolean update) {
         this.update = update;
+    }
+
+    public Boolean isBasic() {
+        return basic;
+    }
+
+    public void setBasic(Boolean basic) {
+        this.basic = basic;
     }
 }

@@ -2,9 +2,21 @@
  * Created by User on 23.08.2015.
  */
 
-app.controller('ChangeAccountsCtrl',['$scope', 'AccountService',
-        function($scope, AccountService) {
+app.controller('ChangeAccountsCtrl',['$scope', 'AccountService', 'CurrencyService',
+        function($scope, AccountService, CurrencyService) {
             $scope.service=AccountService;
+
+            $scope.currencies=  CurrencyService.myCurrenciesIndex;
+
+            $scope.$watch(
+                function(){ return CurrencyService.myCurrenciesIndex },
+                function(newVal){
+                    if (newVal) {
+                        $scope.currencies= newVal;
+
+                    }
+                }
+            );
         }]
 );
 
@@ -14,16 +26,16 @@ app.factory('AccountService',['$http' , function($http ) {
     s.getAccounts=function ()
     {$http.get('?getAccounts').success(function (data) {
 
-        s.accountsIndex = {};
-        createIndexObj(s.accountsIndex, data);
+        s.accountsIndex = createIndexObj(data);
+
     })};
     s.getAccounts();
     s.del = function(id){
         if (id !== undefined && confirm("sure?!")) {
             $http.get('?deleteAccount&id=' + id).then(function (response) {
 
-                    s.accountsIndex={};
-                    createIndexObj(s.accountsIndex,response.data);
+                    s.accountsIndex=createIndexObj(response.data);
+
                 },
                 function(response){
                     alert(response.data.errorMessage);
@@ -35,8 +47,8 @@ app.factory('AccountService',['$http' , function($http ) {
         $http.post('add_account',account).then(
             function (response) {
 
-                s.accountsIndex={};
-                createIndexObj(s.accountsIndex,response.data);
+                s.accountsIndex=createIndexObj(response.data);
+
             },
             function(response){
                 alert(response.data.errorMessage)

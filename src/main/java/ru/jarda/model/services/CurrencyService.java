@@ -34,4 +34,10 @@ import java.util.List;
             currencyDao.deleteObject(id);
         }
 
+    public void addAll(List<Currency> currencies){
+        for (Currency currency:currencies){
+            add(currency);
+        }
+    }
+
 }

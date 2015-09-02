@@ -34,7 +34,7 @@
                         {{account.name}}
                     </td>
                     <td class="accountValue">
-                        {{account.value}} {{account.currency}}
+                        {{account.value}} {{currencies[account.currency].symbol}}
                     </td>
                 </tr>
             </table>
@@ -56,7 +56,7 @@
                     </td>
 
                     <td class="accountValue"> {{operation.outValue}}
-                        {{accountsIndex[operation.outAccountId].currency}}
+                        {{currencies[accountsIndex[operation.outAccountId].currency].symbol}}
                     </td>
                     <td> from {{accountsIndex[operation.outAccountId].name}}
                         on {{expenseCategoriesIndex[operation.outCategoryId].name}}
@@ -71,7 +71,7 @@
                     </td>
 
                     <td class="accountValue"> {{operation.inValue}}
-                        {{accountsIndex[operation.inAccountId].currency}}
+                        {{currencies[accountsIndex[operation.inAccountId].currency].symbol}}
                     </td>
                     <td> to {{accountsIndex[operation.inAccountId].name}}
                         from {{incomeCategoriesIndex[operation.inCategoryId].name}}

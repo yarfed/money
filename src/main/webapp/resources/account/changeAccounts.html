@@ -8,7 +8,7 @@
             {{account.name}}
         </td>
         <td class="accountValue">
-            {{account.value}} {{account.currency}}
+            {{account.value}} {{currencies[account.currency].symbol}}
         </td>
         <td>
             <a   href='' ng-click='service.edit(account)'>
@@ -23,7 +23,7 @@
 
         <td><input class='form-control' ng-model='account.name' type='text'></td>
         <td><input class='form-control' ng-model='account.value' type='text'></td>
-        <td>{{account.currency}}</td>
+        <td>{{currencies[account.currency].symbol}}</td>
         <td>
             <a  href='' ng-click='service.add(account)'>
                 <span class="glyphicon glyphicon-ok btn-success"></span>
@@ -37,11 +37,9 @@
         <td> <input class="form-control" ng-model='service.newAccount.name' type='text'></td>
         <td> <input class="form-control" ng-model='service.newAccount.value'  type='number'></td>
         <td>
-            <select ng-model="service.newAccount.currency" >
-                <option value="eur">eur</option>
-                <option value="usd">usd</option>
-                <option value="rub">rub</option>
-                <option value="nis">nis</option>
+            <select ng-model="service.newAccount.currency"
+                    ng-options="currency.id as currency.code for (id,currency) in currencies" >
+
             </select>
         </td>
         <td>
@@ -52,4 +50,5 @@
     </tr>
     </tbody>
 </table>
+
 </div>

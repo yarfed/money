@@ -50,8 +50,8 @@ app.factory('CategoryService', function($http ) {
     var c = {};
     c.update=function (data,type) {
         c[type+'Categories'] = data;
-        c[type+'CategoriesIndex'] = {};
-        createIndexObj( c[type+'CategoriesIndex'], data);
+        c[type+'CategoriesIndex'] = createIndexObj( data);;
+
     };
 
     c.getCategories = function (type) {

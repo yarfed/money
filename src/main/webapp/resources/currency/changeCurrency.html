@@ -1,12 +1,21 @@
+<div class="col-lg-6 col-md-7">
+<div class="panel panel-default" >
 
-<div class="col-xs-6 " >
-{{service.newRates}}
     <table class="table  table-hover">
-
+            <tr>
+                <td>basic</td>
+                <th>code</th>
+                <th>name</th>
+                <th>sym</th>
+                <th>rate</th>
+                <th>upd</th>
+                <th>edit</th>
+                <th>del</th>
+            </tr>
         <tbody ng-repeat='currency in service.myCurrencies'>
         <tr ng-if="currency!=service.activeCurrency">
             <td >
-                <input  type="radio"
+                <input   ng-disabled="service.lock" type="radio"
                         ng-model="service.basicCurrency" ng-value=currency.code >
             </td>
             <td >
@@ -18,29 +27,28 @@
             <td >
                 {{currency.symbol}}
             </td>
-            <td ng-hide="currency.code==service.basicCurrency">
-                {{currency.course|number:4}}
+            <td >
+                {{currency.course|number:2}}
             </td>
-            <td ng-hide="currency.code==service.basicCurrency" >
+            <td  >
                 <input type="checkbox" disabled ng-model="currency.update" >
             </td>
-            <td ng-show="currency.code==service.basicCurrency" colspan="2">
-                <span>Basic</span>
-            </td>
+
             <td>
-                <a   href='' ng-click='service.edit(currency)'>
+                <a   href='' ng-hide="service.lock" ng-click='service.edit(currency)'>
                     <span class="glyphicon glyphicon-edit btn-default"></span>
                 </a>
             </td>
             <td>
-                <a  ng-hide="currency.code==service.basicCurrency" href='' ng-click='service.del(currency.id)'>
+                <a   href='' ng-hide="service.lock" ng-click='service.del(currency.id)'>
                     <span class="glyphicon glyphicon-remove-sign btn-danger"></span>
                 </a>
             </td>
         </tr>
         <tr ng-if="currency==service.activeCurrency">
-            <td>
-                <input  type="radio" ng-model="service.basicCurrency" ng-value="currency.code">
+            <td >
+                <input  type="radio" ng-disabled="service.lock"
+                        ng-model="service.basicCurrency" ng-value=currency.code >
             </td>
              <td>
                 {{currency.code}}
@@ -50,35 +58,40 @@
             <input class='form-control' ng-model='currency.name' type='text'>
            </td>
             <td>
-                <input class='form-control' ng-model='currency.symbol' type='text'>
+                <input class='form-control' style="width: 50px" ng-model='currency.symbol' type='text'>
             </td>
-            <td ng-hide="currency.code==service.basicCurrency">
+            <td >
 
-                <span ng-show="currency.update" >{{currency.course|number:4}}</span>
-                <input ng-hide="currency.update" class='form-control' ng-model='currency.course' type='number'>
+                <span ng-show="currency.update" >{{currency.course|number:2}}</span>
+                <input ng-hide="currency.update" class='form-control' style="width: 100px"
+                       ng-model='currency.course'>
            </td>
-            <td ng-hide="currency.code==service.basicCurrency">
-                <input type="checkbox" ng-model="currency.update" >
+            <td >
+                <input type="checkbox" ng-model="currency.update"
+                       ng-disabled="currency.code==service.basicCurrency"
+                       ng-change="getCourse(currency)">
             </td>
-            <td ng-show="currency.code==service.basicCurrency" colspan="2">
-                <span>Basic Currency</span>
-            </td>
+
             <td>
-                <a  href='' ng-click='service.addCurrency(currency)'>
+                <a  href='' ng-hide="service.lock||!currency.course" ng-click='service.addCurrency(currency)'>
                     <span class="glyphicon glyphicon-ok btn-success"></span>
                 </a>
-                <a  href='' ng-click='service.activeCurrency=null'>
+                <a  href='' ng-hide="service.lock||!currency.course" ng-click='service.activeCurrency=null'>
                     <span class="glyphicon glyphicon-remove"></span>
                 </a>
             </td>
         </tr>
         </tbody>
     </table>
+
 </div>
-<div class="col-xs-6 col-lg-5">
+    <button class="btn btn-default" ng-click="service.refreshRates();">update</button>
+</div>
+<div class="col-lg-5 col-md-5">
 
     <div class="panel panel-default">
-        <form  name="currencyForm" role='form' class="form-horizontal">
+        <label ng-show="service.lock">Please wait....</label>
+        <form  name="currencyForm" role='form' class="form-horizontal" ng-hide="service.lock">
             <div class="form-group">
                 <div class="col-xs-4 ">
                     <input class="form-control" type="text" disabled="true"
@@ -126,13 +139,13 @@
             <div ng-show="addedCurrency" class="form-group">
                 <div class="col-xs-1 col-xs-offset-1">
                     <button class='btn btn-primary' ng-click='service.addCurrency(service.newCurrency)'
-                           ng-show="service.basicCurrency" ng-disabled="!service.newCurrency.course">Add new </button>
+
+                           ng-disabled="!service.newCurrency.course&&service.basicCurrency">Add new </button>
                      </div>
 
                 <div ng-hide="service.basicCurrency" class="col-xs-1 col-xs-offset-4">
-                    <span style="color: red"> NO Basic!!!</span>
-                    <button class='btn btn-default'
-                        ng-click='service.setBasic(service.newCurrency.code,"true")'>Set Basic</button>
+                    <span style="color: red">Set Basic!!!</span>
+                   <input type="checkbox" ng-model="service.newCurrency.basic">
                     </div>
             </div>
             {{service.basicCurrency}}{{service.newCurrency.course}}

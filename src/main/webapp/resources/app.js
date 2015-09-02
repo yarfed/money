@@ -25,8 +25,10 @@ app.config(function($routeProvider) {
         });
 
     });
-function createIndexObj(obj,data){
+function createIndexObj(data){
+    var result={};
     for (var i=0; i<data.length;i++){
-        obj[data[i].id]=data[i];
+        result[data[i].id]=data[i];
     }
+    return result;
 }

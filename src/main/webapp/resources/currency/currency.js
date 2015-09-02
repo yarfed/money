@@ -14,7 +14,7 @@ app.controller('ChangeCurrencyCtrl',['$scope', 'CurrencyService',
                       CurrencyService.newCurrency.symbol = newVal.symbol_native;
                       CurrencyService.newCurrency.update = true;
                       CurrencyService.newCurrency.course=null;
-                   CurrencyService.getCourse();
+                   CurrencyService.getCourse(CurrencyService.newCurrency);
 
                   }
                 }
@@ -22,15 +22,17 @@ app.controller('ChangeCurrencyCtrl',['$scope', 'CurrencyService',
             $scope.$watch(
                 function(){ return CurrencyService.basicCurrency },
                 function(newVal, oldVal){
-                    if (oldVal) {
-                        alert();
-                       CurrencyService.setBasic(newVal);
-
+                    if (oldVal!==undefined&&newVal!=oldVal) {
+                        CurrencyService.refreshRates();
                     }
                 }
             );
-
-
+            $scope.getCourse=function(currency){
+                if(currency.update){
+                    currency.course=null;
+                    CurrencyService.getCourse(currency);
+                }
+            }
         }
     ]);
 app.factory('CurrencyService',['$http' , function($http) {
@@ -39,40 +41,34 @@ app.factory('CurrencyService',['$http' , function($http) {
 
             s.allCurrency = data;
         });
-    s.getBasic=function() {
-        $http.get('?getProperty&name=basicCurrency').success(function (data) {
-            if (data) {
-                s.basicCurrency = data.value;
-            }
 
-        });
-    };
-    s.getBasic();
     s.getAll = function (){
         $http.get('?getCurrencies').success(function (data) {
             s.myCurrencies=data;
+            s.myCurrenciesIndex=createIndexObj(data);
+            s.getBsic();
         });
+    };
+    s.getBsic=function (){
+        var found=false;
+        for (var i=0;i< s.myCurrencies.length;i++){
+            if (s.myCurrencies[i].basic) {
+                s.basicCurrency=s.myCurrencies[i].code;
+                found=true;
+            }
+        }
+        if (!found){
+            s.basicCurrency=null;
+        }
     };
     s.getAll();
 
-    s.setBasic=function(code,isNew){
-        $http.get('?setProperty&name=basicCurrency&value='+code).success(function (data) {
-            s.basicCurrency = data.value;
-            if (isNew) {
-                s.newCurrency.course=1;
-                s.addCurrency(s.newCurrency);
-            } else{
-                s.refreshRates();
-            }
-
-        });
-    };
-    s.getCourse=function(){
+    s.getCourse=function(currency){
       if ( s.basicCurrency) {
           var req = "https://query.yahooapis.com/v1/public/yql?q=select+*+from+yahoo.finance.xchange+where+pair+=+%22USD" +
-              s.basicCurrency + ',USD'+s.newCurrency.code + "%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
+              s.basicCurrency + ',USD'+currency.code + "%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=";
           $http.get(req).success(function (data) {
-              s.newCurrency.course = data.query.results.rate[0].Rate/data.query.results.rate[1].Rate;
+              currency.course = data.query.results.rate[0].Rate/data.query.results.rate[1].Rate;
           });
       }
     };
@@ -80,6 +76,8 @@ app.factory('CurrencyService',['$http' , function($http) {
         $http.post('addCurrency', currency).then(
             function (response) {
                 s.myCurrencies=response.data;
+                s.myCurrenciesIndex=createIndexObj(response.data);
+                s.getBsic();
                 s.newCurrency={};
             },
             function(response){
@@ -91,12 +89,25 @@ app.factory('CurrencyService',['$http' , function($http) {
         s.activeCurrency = currency;
 
     };
+    s.lock=false;
     s.refreshRates=function(){
+        s.lock=true;
+        if (!s.basicCurrency) {
+            for (var i=0;i< s.myCurrencies.length;i++){
+                s.myCurrencies[i].course=null;
+                s.myCurrencies[i].update=true;
+            }
+            s.editAll();
+
+            return;
+        }
         var req="";
-        for (i=0;i< s.myCurrencies.length;i++){
+        for ( i=0;i< s.myCurrencies.length;i++){
             if (s.myCurrencies[i].code== s.basicCurrency){
                 s.newRate=s.myCurrencies[i].course;
+                s.myCurrencies[i].basic=true;
             }else {
+                s.myCurrencies[i].basic=null;
                 if (s.myCurrencies[i].update) {
                     req = req + "USD" +
                         s.basicCurrency + ',USD' + s.myCurrencies[i].code + ','
@@ -106,33 +117,45 @@ app.factory('CurrencyService',['$http' , function($http) {
 
         $http.get("https://query.yahooapis.com/v1/public/yql?q=select+*+from+yahoo.finance.xchange+where+pair+=+%22"+
             req+"%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback=").success(function (data) {
-            s.newRates=[];
+
             var j=0;
-            var currency={};
+
             for (i=0;i< s.myCurrencies.length;i++){
                 if (s.myCurrencies[i].code== s.basicCurrency) {
-                    currency.course=1;
+                    s.myCurrencies[i].course=1;
                 }else{
                     if (s.myCurrencies[i].update) {
-                        currency.course = data.query.results.rate[j].Rate / data.query.results.rate[j+1].Rate;
+                        s.myCurrencies[i].course = data.query.results.rate[j].Rate / data.query.results.rate[j+1].Rate;
                         j=j+2;
                     } else {
-                        currency.course=s.myCurrencies[i].course/ s.newRate;
+                        s.myCurrencies[i].course=s.myCurrencies[i].course/ s.newRate;
                     }
                 }
-                currency.id = s.myCurrencies[i].id;
-                s.newRates.push(currency);
-                currency={};
             }
+            s.editAll();
 
         });
+    };
+    s.editAll=function(){
+        $http.post('editAllCurrencies', s.myCurrencies).then(
+            function (response) {
+                s.myCurrencies=response.data;
+                s.myCurrenciesIndex=createIndexObj(response.data);
+                s.getBsic();
+                s.lock=false;
+            },
+            function(response){
+                alert(response.data.errorMessage)
+
+            });
     };
     s.del=function(id){
         if (id !== undefined && confirm("sure?!")) {
             $http.get('?deleteCurrency&id=' + id).then(function (response) {
 
                     s.myCurrencies=response.data;
-
+                    s.myCurrenciesIndex=createIndexObj(response.data);
+                    s.getBsic();
                 },
                 function(response){
                     alert(response.data.errorMessage);

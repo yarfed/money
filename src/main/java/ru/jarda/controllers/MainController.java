@@ -137,6 +137,11 @@ public class MainController  {
         currencyService.add(currency);
         return currencyService.getAll();
     }
+    @RequestMapping(value = "editAllCurrencies", method = RequestMethod.POST)
+    public  @ResponseBody List editAllCurrencies(@RequestBody List<Currency> currencies) {
+        currencyService.addAll(currencies);
+        return currencyService.getAll();
+    }
 
     @RequestMapping(params = "getCurrencies", method = RequestMethod.GET)
     @ResponseBody

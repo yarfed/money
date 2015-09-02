@@ -3,7 +3,7 @@
  */
 
 app.controller('OperationsCtrl',
-    function OperationsCtrl($scope, AccountService,OperationService,CategoryService) {
+    function OperationsCtrl($scope, AccountService,OperationService,CategoryService,CurrencyService) {
 
         $scope.accountsIndex=AccountService.accountsIndex;
         $scope.$watch(
@@ -47,6 +47,17 @@ app.controller('OperationsCtrl',
             function(newVal){
                 $scope.operations = newVal;
                 $scope.eraseForm();
+            }
+        );
+        $scope.currencies=  CurrencyService.myCurrenciesIndex;
+
+        $scope.$watch(
+            function(){ return CurrencyService.myCurrenciesIndex },
+            function(newVal){
+                if (newVal) {
+                    $scope.currencies= newVal;
+
+                }
             }
         );
 
