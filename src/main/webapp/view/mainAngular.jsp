@@ -34,13 +34,18 @@
 <body ng-app="moneyApp">
 <div class="container">
     <div class="row">
-        <div class="col-xs-12">
-            <div id="nav-account">
+        <div class="col-xs-3">
+        <div id="nav-account">
                 Welcome:&nbsp;
                 <sec:authentication property="name"/><br>
                 <c:url var="logoutUrl" value="/logout"/>
                 <a id="navLogoutLink" href="${logoutUrl}">Logout</a>
             </div>
+        </div>
+        <div class="col-xs-5">
+            <span class="glyphicon glyphicon-arrow-right btn-success"></span>&nbsp;
+            <a href="https://github.com/yarfed/money">view source code</a>&nbsp;
+            <span class="glyphicon glyphicon-arrow-left btn-success">
         </div>
     </div>
     <div class="row">
