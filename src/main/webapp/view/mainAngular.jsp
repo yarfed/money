@@ -35,8 +35,6 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
-            <span id="message">login:user pass:user</span>
-
             <div id="nav-account">
                 Welcome:&nbsp;
                 <sec:authentication property="name"/><br>

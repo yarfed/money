@@ -8,9 +8,9 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-    <script src="${ctx}/resources/js/jquery-1.11.2.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-    <script src="${ctx}/resources/js/registration.js"></script>
+    <script src="${ctx}/resources/registration.js"></script>
   <script>
     $(document).ready(function () {
         init('${ctx}');
@@ -41,6 +41,7 @@
                value="Login"/>
     </div>
 </form>
+<button id="demo">try me</button> <- push to demo enter<br><br>
 if you do not have a login please register.
 <span id="message"></span>
 <div id="registrationForm">

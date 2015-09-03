@@ -29,5 +29,11 @@ function init(context) {
             })
         }
     });
+    $("#demo").click(function(){
+
+        $("#username").val('user');
+        $("#password").val('user');
+        $("#submit").click();
+    });
 
 }
