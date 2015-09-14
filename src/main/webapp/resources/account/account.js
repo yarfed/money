@@ -23,8 +23,8 @@ app.controller('ChangeAccountsCtrl',['$scope', 'AccountService', 'CurrencyServic
 app.factory('AccountService',['$http' , function($http ) {
     var s={};
 
-    s.getAccounts=function ()
-    {$http.get('?getAccounts').success(function (data) {
+    s.getAccounts=function () {
+        $http.get('account/?getAll').success(function (data) {
 
         s.accountsIndex = createIndexObj(data);
 
@@ -32,7 +32,7 @@ app.factory('AccountService',['$http' , function($http ) {
     s.getAccounts();
     s.del = function(id){
         if (id !== undefined && confirm("sure?!")) {
-            $http.get('?deleteAccount&id=' + id).then(function (response) {
+            $http.get('account/?delete&id=' + id).then(function (response) {
 
                     s.accountsIndex=createIndexObj(response.data);
 
@@ -44,7 +44,7 @@ app.factory('AccountService',['$http' , function($http ) {
     };
 
     s.add = function(account){
-        $http.post('add_account',account).then(
+        $http.post('account/add', account).then(
             function (response) {
 
                 s.accountsIndex=createIndexObj(response.data);

@@ -103,14 +103,14 @@ app.controller('OperationsCtrl',
 app.factory('OperationService',['$http' , 'AccountService',function($http, AccountService) {
     var o={};
 
-    o.getOperations=function ()
-    {$http.get('?getOperations').success(function (data) {
+    o.getOperations=function () {
+        $http.get('operation/?getAll').success(function (data) {
         o.operations=data;
     })}();
 
     o.deleteOperation = function(id){
         if (id !== undefined && confirm("sure?!")) {
-            $http.get('?deleteOperation&id=' + id).then(function (response) {
+            $http.get('operation/?delete&id=' + id).then(function (response) {
                     o.operations=response.data;
                     AccountService.getAccounts();
                 },
@@ -121,7 +121,7 @@ app.factory('OperationService',['$http' , 'AccountService',function($http, Accou
     };
 
     o.addOperation = function(operation){
-        $http.post('addOperation',operation).then(
+        $http.post('operation/add', operation).then(
         function (response) {
             o.operations = response.data;
             AccountService.getAccounts();

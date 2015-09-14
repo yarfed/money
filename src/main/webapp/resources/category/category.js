@@ -55,7 +55,7 @@ app.factory('CategoryService', function($http ) {
     };
 
     c.getCategories = function (type) {
-        $http.get('?get_'+type+'_categories').success(function(data) {
+        $http.get('category/' + type + '/?get').success(function (data) {
             c.update(data,type);
 
         });
@@ -64,7 +64,7 @@ app.factory('CategoryService', function($http ) {
     c.getCategories('expense');
     c.add = function(category,type){
         category.parentId=category.parentId||0;
-        $http.post('add_'+type+'_category',category).then(
+        $http.post('category/' + type + '/add', category).then(
             function (response) {
                 c.update(response.data,type);
             },
@@ -74,7 +74,7 @@ app.factory('CategoryService', function($http ) {
 
     };
     c.del = function(id,type){
-        $http.get('?del_'+type+'_category&id=' + id).then(
+        $http.get('category/' + type + '/?delete&id=' + id).then(
             function (response) {
                 c.update(response.data,type);
             },

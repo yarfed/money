@@ -43,7 +43,7 @@ app.factory('CurrencyService',['$http' , function($http) {
         });
 
     s.getAll = function (){
-        $http.get('?getCurrencies').success(function (data) {
+        $http.get('currency/?getAll').success(function (data) {
             s.myCurrencies=data;
             s.myCurrenciesIndex=createIndexObj(data);
             s.getBsic();
@@ -73,7 +73,7 @@ app.factory('CurrencyService',['$http' , function($http) {
       }
     };
     s.addCurrency=function(currency){
-        $http.post('addCurrency', currency).then(
+        $http.post('currency/add', currency).then(
             function (response) {
                 s.myCurrencies=response.data;
                 s.myCurrenciesIndex=createIndexObj(response.data);
@@ -137,7 +137,7 @@ app.factory('CurrencyService',['$http' , function($http) {
         });
     };
     s.editAll=function(){
-        $http.post('editAllCurrencies', s.myCurrencies).then(
+        $http.post('currency/editAll', s.myCurrencies).then(
             function (response) {
                 s.myCurrencies=response.data;
                 s.myCurrenciesIndex=createIndexObj(response.data);
@@ -151,7 +151,7 @@ app.factory('CurrencyService',['$http' , function($http) {
     };
     s.del=function(id){
         if (id !== undefined && confirm("sure?!")) {
-            $http.get('?deleteCurrency&id=' + id).then(function (response) {
+            $http.get('currency/?delete&id=' + id).then(function (response) {
 
                     s.myCurrencies=response.data;
                     s.myCurrenciesIndex=createIndexObj(response.data);
